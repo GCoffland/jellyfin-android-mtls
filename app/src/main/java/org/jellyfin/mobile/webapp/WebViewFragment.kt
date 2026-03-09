@@ -43,6 +43,7 @@ import org.jellyfin.mobile.utils.dip
 import org.jellyfin.mobile.utils.extensions.getParcelableCompat
 import org.jellyfin.mobile.utils.extensions.replaceFragment
 import org.jellyfin.mobile.utils.fadeIn
+import org.jellyfin.mobile.utils.getClientCertificate
 import org.jellyfin.mobile.utils.isOutdated
 import org.jellyfin.mobile.utils.requestNoBatteryOptimizations
 import org.jellyfin.mobile.utils.runOnUiThread
@@ -91,6 +92,7 @@ class WebViewFragment : Fragment(), BackPressInterceptor, JellyfinWebChromeClien
             server,
             assetsPathHandler,
             apiClientController,
+            getClientCertificate(server.id.toString()),
         ) {
             override fun onConnectedToWebapp() {
                 val webViewBinding = webViewBinding ?: return

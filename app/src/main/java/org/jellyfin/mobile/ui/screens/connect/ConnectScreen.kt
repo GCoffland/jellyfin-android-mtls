@@ -41,8 +41,8 @@ fun ConnectScreen(
             LogoHeader()
             ServerSelection(
                 showExternalConnectionError = showExternalConnectionError,
-                onConnected = { hostname ->
-                    mainViewModel.switchServer(hostname)
+                onConnected = { hostname, mtls ->
+                    mainViewModel.switchServer(hostname, mtls)
                 },
             )
             StyledTextButton(

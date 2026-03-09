@@ -13,13 +13,14 @@ import org.jellyfin.sdk.discovery.RecommendedServerInfo
 import org.jellyfin.sdk.discovery.RecommendedServerInfoScore
 import org.jellyfin.sdk.model.api.ServerDiscoveryInfo
 import timber.log.Timber
+import java.security.KeyStore
 
 class ConnectionHelper(
     private val context: Context,
     private val jellyfin: Jellyfin,
 ) {
     @Suppress("LongMethod")
-    suspend fun checkServerUrl(enteredUrl: String): CheckUrlState {
+    suspend fun checkServerUrl(enteredUrl: String, mtls: KeyStore.PrivateKeyEntry? = null): CheckUrlState {
         Timber.i("checkServerUrlAndConnection $enteredUrl")
 
         val candidates = withContext(Dispatchers.IO) {
@@ -33,8 +34,10 @@ class ConnectionHelper(
         val badServers = mutableListOf<RecommendedServerInfo>()
         val goodServers = mutableListOf<RecommendedServerInfo>()
         val greatServer = withContext(Dispatchers.IO) {
-            jellyfin.discovery.getRecommendedServers(candidates)
-        }.firstOrNull { recommendedServer ->
+	    jellyfin.discovery.getRecommendedServers(
+            	candidates,
+            	mtls = mtls)
+	}.firstOrNull { recommendedServer ->
             when (recommendedServer.score) {
                 RecommendedServerInfoScore.GREAT -> true
                 RecommendedServerInfoScore.GOOD -> {
